@@ -7,7 +7,7 @@ inputs:
   title-regex:
     description: "Regex to ensure PR title matches. Allows anything by default."
     required: false
-    default: AN-\d+.*|feature:\s.*|bugfix:\s.*|hotfix:\s.*|custom:\s.*
+    default: AN-\d+.*|(feature|bugfix|hotix|custom)[:\/].*
   on-failed-regex-create-review:
     description:
       "Whether the action should create a PR review & comment when the regex
@@ -19,7 +19,7 @@ inputs:
       "Comment for the bot to post on PRs that fail the regex. Use %regex% to
       reference regex."
     required: false
-    default: "PR name does not conform with convention 😵‍💫 (needs to start with AN-/feature/bugfix/hotfix/custom followed by ':')"
+    default: "PR name does not conform with convention 😵‍💫 (PR title must start with either 'AN-' followed by numbers, or one of: 'feature:', 'bugfix:', 'hotfix:', 'custom:' (or use '/' instead of ':')"
   on-failed-regex-fail-action:
     description: "Whether the action should fail when the regex doesn't match."
     required: false
