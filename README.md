@@ -28,7 +28,7 @@ jobs:
   pr-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: morrisoncole/pr-lint-action@v1.7.1
+      - uses: anecdotes-ai/github-action-pr-lint
         with:
           # Note: if you have branch protection rules enabled, the `GITHUB_TOKEN` permissions
           # won't cover dismissing reviews. Your options are to pass in a custom token
@@ -54,12 +54,12 @@ jobs:
 | Option                                      | Required? | Type   | Default Value                      | Description                                                                                                                                                   |
 | ------------------------------------------- | --------- | ------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `repo-token`                                | yes       | string | N/A                                | [About the `GITHUB_TOKEN` secret](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#about-the-github_token-secret).           |
-| `title-regex`                               | yes       | string | ".\*"                              | A JavaScript regex to test the title of each Pull Request against. Allows anything by default.                                                                |
-| `on-failed-regex-fail-action`               | no        | bool   | false                              | If the regex fails, sets the action status to failed. When the action exits it will be with an exit code of 1.                                                |
-| `on-failed-regex-create-review`             | no        | bool   | true                               | If the regex fails, uses the GitHub review mechanism to submit a review. The review type is determined by `on-failed-regex-request-changes`.                  |
-| `on-failed-regex-request-changes`           | no        | bool   | true                               | Uses 'Request Changes' when creating a review. Otherwise, uses 'Comment'. _Note:_ if `on-failed-regex-create-review` is `false`, this won't do anything.      |
-| `on-failed-regex-comment`                   | no        | string | "PR title failed to match %regex%" | Comment for the bot to post on PRs that fail the regex (or the console output if `on-failed-regex-create-review` is `false`). Use %regex% to reference regex. |
-| `on-succeeded-regex-dismiss-review-comment` | no        | string | "All good!"                        | The message to post as a comment when the regex succeeds after previously failing.                                                                            |
+| `title-regex`                               | no        | string | "AN-\d+[:\/].*"                    | Regex to ensure PR title matches. Allows anything by default.                                                                                                |
+| `on-failed-regex-fail-action`               | no        | bool   | true                               | Whether the action should fail when the regex doesn't match.                                                                                                 |
+| `on-failed-regex-create-review`             | no        | bool   | true                               | Whether the action should create a PR review & comment when the regex doesn't match.                                                                         |
+| `on-failed-regex-request-changes`           | no        | bool   | true                               | Whether the action should request changes or just provide a comment.                                                                                         |
+| `on-failed-regex-comment`                   | no        | string | "PR name does not conform with convention 😵‍💫 (PR title must start with 'AN-' followed by numbers, deliminated by a ':'' or /)" | Comment for the bot to post on PRs that fail the regex. Use %regex% to reference regex. |
+| `on-succeeded-regex-dismiss-review-comment` | no        | string | "PR name conforms with convention - Great Success! 🥳" | Comment for the bot to post on PRs that succeed the regex and have their review dismissed.                                                                   |
 
 ## Developing
 
