@@ -7,7 +7,7 @@ inputs:
   title-regex:
     description: "Regex to ensure PR title matches. Allows anything by default."
     required: false
-    default: ^[Aa][Nn]-\d+[:\/].*
+    default: ^[Aa][Nn]-(?!0+[:\/])\d+[:\/].*
   on-failed-regex-create-review:
     description:
       "Whether the action should create a PR review & comment when the regex
