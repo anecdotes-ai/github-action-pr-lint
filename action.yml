@@ -19,7 +19,7 @@ inputs:
       "Comment for the bot to post on PRs that fail the regex. Use %regex% to
       reference regex."
     required: false
-    default: "PR name does not conform with convention 😵‍💫 (PR title must start with 'AN-' followed by numbers, deliminated by a ':'' or /)"
+    default: "PR name does not conform with convention 😵‍💫 (PR title must start with 'AN-' followed by non-zero numbers, deliminated by a ':' or '/')"
   on-failed-regex-fail-action:
     description: "Whether the action should fail when the regex doesn't match."
     required: false
