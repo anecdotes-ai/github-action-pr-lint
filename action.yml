@@ -7,7 +7,7 @@ inputs:
   title-regex:
     description: "Regex to ensure PR title matches. Allows anything by default."
     required: false
-    default: ^[Aa][Nn]-\d+[:\/].*
+    default: ^[Aa][Nn]-(?!0+[:\/])\d+[:\/].*
   on-failed-regex-create-review:
     description:
       "Whether the action should create a PR review & comment when the regex
@@ -19,7 +19,7 @@ inputs:
       "Comment for the bot to post on PRs that fail the regex. Use %regex% to
       reference regex."
     required: false
-    default: "PR name does not conform with convention 😵‍💫 (PR title must start with 'AN-' followed by numbers, deliminated by a ':'' or /)"
+    default: "PR name does not conform with convention 😵‍💫 (PR title must start with 'AN-' followed by non-zero numbers, deliminated by a ':' or '/')"
   on-failed-regex-fail-action:
     description: "Whether the action should fail when the regex doesn't match."
     required: false
