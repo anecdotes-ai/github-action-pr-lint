@@ -86,25 +86,37 @@ const dismissReview = async (pullRequest: {
     return;
   }
 
-  if (review.state === "COMMENTED") {
-    await octokit.rest.pulls.updateReview({
-      owner: pullRequest.owner,
-      repo: pullRequest.repo,
-      pull_number: pullRequest.number,
-      review_id: review.id,
-      body: onSucceededRegexDismissReviewComment,
-    });
+  // GitHub API requires a non-empty message/body for dismiss and update
+  const dismissMessage = onSucceededRegexDismissReviewComment?.trim();
+  if (!dismissMessage) {
+    debug("No dismiss comment configured, skipping review dismissal");
+    return;
+  }
 
-    debug(`Updated existing review`);
-  } else {
-    await octokit.rest.pulls.dismissReview({
-      owner: pullRequest.owner,
-      repo: pullRequest.repo,
-      pull_number: pullRequest.number,
-      review_id: review.id,
-      message: onSucceededRegexDismissReviewComment,
-    });
-    debug(`Dismissed existing review`);
+  try {
+    if (review.state === "COMMENTED") {
+      await octokit.rest.pulls.updateReview({
+        owner: pullRequest.owner,
+        repo: pullRequest.repo,
+        pull_number: pullRequest.number,
+        review_id: review.id,
+        body: dismissMessage,
+      });
+
+      debug(`Updated existing review`);
+    } else {
+      await octokit.rest.pulls.dismissReview({
+        owner: pullRequest.owner,
+        repo: pullRequest.repo,
+        pull_number: pullRequest.number,
+        review_id: review.id,
+        message: dismissMessage,
+      });
+      debug(`Dismissed existing review`);
+    }
+  } catch (error) {
+    // Handle cases where the review was already dismissed or modified
+    debug(`Failed to dismiss/update review: ${error}`);
   }
 };
 
