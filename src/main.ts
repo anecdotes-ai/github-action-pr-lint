@@ -63,13 +63,24 @@ const createOrUpdateReview = async (
       event: onFailedRegexRequestChanges ? "REQUEST_CHANGES" : "COMMENT",
     });
   } else {
-    await octokit.rest.pulls.updateReview({
-      owner: pullRequest.owner,
-      repo: pullRequest.repo,
-      pull_number: pullRequest.number,
-      review_id: review.id,
-      body: comment,
-    });
+    try {
+      await octokit.rest.pulls.updateReview({
+        owner: pullRequest.owner,
+        repo: pullRequest.repo,
+        pull_number: pullRequest.number,
+        review_id: review.id,
+        body: comment,
+      });
+    } catch (error) {
+      debug(`Failed to update existing review, creating new one: ${error}`);
+      await octokit.rest.pulls.createReview({
+        owner: pullRequest.owner,
+        repo: pullRequest.repo,
+        pull_number: pullRequest.number,
+        body: comment,
+        event: onFailedRegexRequestChanges ? "REQUEST_CHANGES" : "COMMENT",
+      });
+    }
   }
 };
 
